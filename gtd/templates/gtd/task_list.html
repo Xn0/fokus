@@ -4,7 +4,17 @@
     <h2>Tasks</h2>
     <ul>
         {% for task in task_list %}
-            <li>{{ task.text }}</li>
+            <li {% if task.done %}
+                class="text-success"
+                {% endif %}
+            >
+                <span>{{ task.text }}</span>
+                <button
+                    hx-patch="/gtd/{{ task.id }}"
+                    name="done"
+                    value="{{ task.done }}"
+                >Done</button>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger" role="alert">
+            <p>{{ form.non_field_errors }}</p>
+        </div>
+    {% endif %}
+    {% for field in form %}
+        {% if field.errors %}
+            <div class="alert alert-danger" role="alert">
+                <p>{{ field.label }}: {{ field.errors }}</p>
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <form action="
+    {% if task %}
+        {% url 'gtd:rep-task' task.pk %}
+    {% else %}
+        {% url 'gtd:new-rep-task' %}
+    {% endif %}
+    " method="post">
+        {% csrf_token %}
+        <input type="number" name="id" value="{{ task.id }}" hidden>
+        <div class="mb-5">
+            <label for="text-field" class="form-label">Text</label>
+            <textarea class="form-control" id="text-field" name="text" rows="2">{{ task.text }}</textarea>
+        </div>
+        <div class="mb-5 row">
+            <div class="col-6">
+                <label for="start_date" class="form-label">Start date</label>
+                <input type="text" class="form-control" id="start_date" name="start_date" placeholder="04/24/2024 8 p.m."
+                       value="{{ task.start_date|date:'m/d/y H:i' }}">
+            </div>
+            <div class="col-6">
+                <label for="rep_interval" class="form-label">Repeat every N day</label>
+                <input type="number" class="form-control" id="rep_interval" name="rep_interval" placeholder="3" value="{{ task.rep_interval }}">
+            </div>
+            <div id="emailHelp" class="form-text">Repeat at the same time every N day starting from start datetime.</div>
+        </div>
+        <div class="d-flex">
+            <hr class="my-auto flex-grow-1">
+            <div class="px-4">OR</div>
+            <hr class="my-auto flex-grow-1">
+        </div>
+        <div class="my-5 row">
+            <label for="rep_n_a_week" class="form-label">Repeat N times a week</label>
+            <input type="number" class="form-control" id="rep_n_a_week" name="rep_n_a_week" placeholder="3" value="{{ task.rep_n_a_week }}">
+        </div>
+        <div class="mb-5">
+            <div class="form-check form-switch">
+                 {{form.running }}
+                <label class="form-check-label" for="running">Run the task</label>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-outline-secondary w-100" value="{% if task.id %}Save{% else %}Create{% endif %}">
+    </form>
+
+{% endblock %}

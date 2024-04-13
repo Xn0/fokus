@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Rep Tasks</h2>
-    <ul>
+    <div class="col-12 mt-4">
         {% for task in rep_task_list %}
-            <li
-                    
-            >{{ task.text }}</li>
+            <div class="row task">
+                <div class="col-12 task-row my-2">
+                    <a href="{% url 'gtd:rep-task' task.pk %}">
+                        {% if task.running %}►{% else %}⨂{% endif %}
+                        {{ task.text }}
+                    </a>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
+    <div class="col-12 mt-4">
+        <a class="btn btn-outline-secondary w-100" href="{% url 'gtd:new-rep-task' %}">Create new task</a>
+    </div>
 {% endblock %}

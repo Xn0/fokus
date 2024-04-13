@@ -1,20 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h2>Tasks</h2>
-    <ul>
+    <div class="col-12">
+        <div class="row my-3 sticky-top bg-white p-1"
+             hx-get="{% url 'gtd:new-task' %}"
+             hx-swap="innerHTML"
+             hx-trigger="load"
+        >
+{#            Literally placeholder until hmtx loads form from server #}
+            <input class="form-control" type="text" placeholder="New task">
+        </div>
         {% for task in task_list %}
-            <li {% if task.done %}
-                class="text-success"
-                {% endif %}
-            >
-                <span>{{ task.text }}</span>
-                <button
-                    hx-patch="/gtd/{{ task.id }}"
-                    name="done"
-                    value="{{ task.done }}"
-                >Done</button>
-            </li>
+            <div class="row task">
+
+                <div class="col-12 task-row
+                    {% if task.done %} done-task {% endif %}"
+                >
+                    <span>• {{ task.text }}</span>
+                </div>
+
+                <div class="col-3 text-center task-button">
+                    <span
+                    >{{ task.show_count }}</span>
+                </div>
+
+                <div class="col-3 text-center task-button">
+                    {% if task.done %}
+                        <button
+                                class="btn btn-sm btn-outline-secondary"
+                                hx-patch="{% url 'gtd:task' task.id %}"
+                                hx-target="#body-container"
+                                hx-swap="outerHTML"
+                                hx-vals='{"done":"False"}'
+                                {#                                TODO confirm #}
+                        >Undone
+                        </button>
+                    {% else %}
+                        <button
+                                class="btn btn-sm btn-outline-secondary"
+                                hx-patch="{% url 'gtd:task' task.id %}"
+                                hx-target="#body-container"
+                                hx-swap="outerHTML"
+                                hx-vals='{"done":"True"}'
+                        >Done
+                        </button>
+                    {% endif %}
+                </div>
+
+                <div class="col-3 text-center task-button">
+                    <button
+                            class="btn btn-sm btn-outline-secondary"
+                            hx-get="{% url 'gtd:task' task.id %}"
+                            hx-target="previous .task-row"
+                            hx-swap="outerHTML"
+                    >Rewrite
+{#                        TODO Disable on rep tasks #}
+                    </button>
+                </div>
+
+                <div class="col-3 text-center task-button">
+                    <button
+                            class="btn btn-sm btn-outline-secondary"
+                            hx-delete="{% url 'gtd:task' task.id %}"
+                            hx-target="#body-container"
+                            hx-swap="outerHTML"
+                            {#                            TODO confirm #}
+                    >Delete
+                    </button>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

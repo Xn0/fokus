@@ -1,0 +1,10 @@
+<input
+        hx-patch="{% url 'gtd:task' task.id %}"
+        hx-target="#body-container"
+        hx-swap="outerHTML"
+        hx-trigger="keyup[key=='Enter']"
+        name="text"
+        type="text"
+        value="{{ task.text }}"
+        class="form-control"
+        placeholder="Edit task">

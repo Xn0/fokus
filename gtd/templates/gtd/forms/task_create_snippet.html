@@ -1,0 +1,9 @@
+<input
+        hx-post="{% url 'gtd:new-task' %}"
+        hx-target="#body-container"
+        hx-swap="outerHTML"
+        hx-trigger="keyup[key=='Enter']"
+        name="text"
+        type="text"
+        class="form-control"
+        placeholder="New task">

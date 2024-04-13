@@ -11,23 +11,40 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+from dotenv import load_dotenv
+from os import getenv
+import dj_database_url
+
+load_dotenv()
+
+APP_NAME = getenv("FLY_APP_NAME")
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG')
+DEBUG = getenv('DEBUG')
+STATIC_DEBUG = getenv('STATIC_DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    f"{APP_NAME}.fly.dev",
+    'localhost',
+    '127.0.0.1'
+]
 
+CSRF_TRUSTED_ORIGINS = [
+    f"https://{APP_NAME}.fly.dev",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # Application definition
 
@@ -38,6 +55,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "debug_toolbar",
     'gtd.apps.GtdConfig',
 ]
 
@@ -49,6 +67,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'xnoGTD.urls'
@@ -71,21 +90,41 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'xnoGTD.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "xnogtd",
-        "USER": "xnogtd",
-        "PASSWORD": "password",
-        "HOST": "127.0.0.1",
-        "PORT": "35432",
-    }
-}
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": getenv("DB_NAME"),
+#         "USER": getenv("DB_USER"),
+#         "PASSWORD": getenv("DB_PASS"),
+#         "HOST": getenv("DB_HOST"),
+#         "PORT": getenv("DB_PORT"),
+#     }
+# }
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': getenv('PGDATABASE'),
+#         'USER': getenv('PGUSER'),
+#         'PASSWORD': getenv('PGPASSWORD'),
+#         'HOST': getenv('PGHOST'),
+#         'PORT': getenv('PGPORT', 5432),
+#         'OPTIONS': {
+#             'sslmode': 'require',
+#         },
+#         'DISABLE_SERVER_SIDE_CURSORS': True,
+#     }
+# }
 
+DATABASES = {
+    'default': dj_database_url.config(
+        default=getenv('DB_URL'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -105,23 +144,31 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Los_Angeles'
 
-USE_I18N = True
+USE_I18N = False
 
-USE_TZ = True
+USE_TZ = False  # TODO
 
+SHORT_DATETIME_FORMAT = "m/d/y H:i",  # '10/25/06 14:30'
+DATETIME_FORMAT = "m/d/y H:i",  # '10/25/06 14:30'
+
+DATETIME_INPUT_FORMATS = [
+    "%m/%d/%y %H:%M",  # '10/25/06 14:30'
+]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'data/static/'
 
-STATIC_URL = 'static/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'data/media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

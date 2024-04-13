@@ -39,13 +39,15 @@ class RepTask(models.Model):
         if not self.running:
             return
 
-        # if active task exist
-        if self.task_set.filter(done=False):
+        # if active task exist or if the last task was done today
+        if self.task_set.filter(done=False) or self.task_set.filter(
+                done=True,
+                update_date__date=datetime.today()
+        ):
             return
 
         # repeats a week case
         if self.rep_n_a_week:
-            # TODO don't add new task at the same day prev was done
             today = date.today()
             last_monday = today - timedelta(days=today.weekday())
             cnt = self.task_set.filter(update_date__gt=last_monday).count()
@@ -54,7 +56,6 @@ class RepTask(models.Model):
 
         # repeat by interval case
         elif self.start_date and self.rep_interval:
-            # TODO don't add new task at the same day prev was done
             now = datetime.now()
             last_task = self.task_set.order_by("-creation_date").first()
             if last_task:

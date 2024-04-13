@@ -1,7 +1,22 @@
-a:link {color: black; text-decoration: none;}
-a:visited {color: black; text-decoration: none;}
-a:hover {color: black; text-decoration: none;}
-a:active {color: black; text-decoration: none;}
+a:link {
+    color: black;
+    text-decoration: none;
+}
+
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover {
+    color: black;
+    text-decoration: none;
+}
+
+a:active {
+    color: black;
+    text-decoration: none;
+}
 
 .container-sm {
     max-width: 540px;
@@ -37,4 +52,11 @@ input[type=text] {
     color: rgba(0, 0, 0, 0.7);
     font-weight: 300;
     font-size: 1.5em;
+    width: 33%;
+    text-align: center;
+}
+
+#top-menu {
+    display: flex;
+    justify-content: space-between;
 }

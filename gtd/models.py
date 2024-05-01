@@ -40,7 +40,7 @@ class RepTask(models.Model):
             return
 
         # if active task exist or if the last task was done today
-        if self.task_set.filter(done=False) or self.task_set.filter(
+        if self.task_set.filter(done=False, deleted=False) or self.task_set.filter(
                 done=True,
                 update_date__date=datetime.today()
         ):
@@ -105,13 +105,18 @@ class Task(models.Model):
         """
         update all tasks that are viewed before current task
         """
-        # TODO need to save tasks order somehow
-        Task.objects.filter(
+        tasks = Task.objects.filter(
             done=False,
             update_date__lte=self.update_date,
             user=self.user,
             deleted=False
-        ).update(update_date=datetime.now(), show_count=F("show_count") + 1)
+        ).order_by('update_date')
+        now = datetime.now()
+        # update one by one in order to preserve order of tasks
+        for task in tasks:
+            task.update_date = now
+            task.save()
+            now = now + timedelta(milliseconds=1)
 
     def update_task(self, update: dict) -> None:
         self._update_missed_tasks()

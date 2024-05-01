@@ -1,20 +1,20 @@
 a:link {
-    color: black;
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: none;
 }
 
 a:visited {
-    color: black;
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: none;
 }
 
 a:hover {
-    color: black;
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: none;
 }
 
 a:active {
-    color: black;
+    color: rgba(0, 0, 0, 0.7);
     text-decoration: none;
 }
 
@@ -39,8 +39,32 @@ input[type=text] {
     transition: 1s;
 }
 
-.task:hover .task-button {
+.task-counter {
+    margin-left: -0.3em;
+    opacity: 0;
+    transition: 1s;
+    position: absolute;
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.task:hover .task-button, .task:hover .task-counter {
     opacity: 1;
+}
+
+.task:hover .task-dot {
+    transition: 0.5s;
+    opacity: 0;
+}
+
+.task {
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.task:hover {
+    /*background-color: rgba(19, 19, 120, 0.01);*/
+    -webkit-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.2);
 }
 
 .done-task {

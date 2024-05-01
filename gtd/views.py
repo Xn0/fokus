@@ -70,6 +70,7 @@ class TaskView(DetailView):
                         query['done'] = True if v == 'True' else False
                     case 'text':
                         query['text'] = v
+                        query['show_count'] = 0
                     case _:
                         pass
         except Exception as e:

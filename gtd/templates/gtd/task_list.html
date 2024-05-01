@@ -16,15 +16,16 @@
                 <div class="col-12 task-row
                     {% if task.done %} done-task {% endif %}"
                 >
-                    <span>• {{ task.text }}</span>
+                    <span class="task-counter"><small>{{ task.show_count }}</small></span>
+                    <span class="task-dot">•</span>
+                    <span>  {{ task.text }}</span>
+{#                TODO get threshold from some user settings #}
+                    {% if task.show_count > 20 %}
+                    <i class="text-secondary"> Rewrite?</i>
+                    {% endif %}
                 </div>
 
-                <div class="col-3 text-center task-button">
-                    <span
-                    >{{ task.show_count }}</span>
-                </div>
-
-                <div class="col-3 text-center task-button">
+                <div class="col-4 text-center task-button">
                     {% if task.done %}
                         <button
                                 class="btn btn-sm btn-outline-secondary"
@@ -47,7 +48,7 @@
                     {% endif %}
                 </div>
 
-                <div class="col-3 text-center task-button">
+                <div class="col-4 text-center task-button">
                     <button
                             class="btn btn-sm btn-outline-secondary"
                             hx-get="{% url 'gtd:task' task.id %}"
@@ -58,7 +59,7 @@
                     </button>
                 </div>
 
-                <div class="col-3 text-center task-button">
+                <div class="col-4 text-center task-button">
                     <button
                             class="btn btn-sm btn-outline-secondary"
                             hx-delete="{% url 'gtd:task' task.id %}"

@@ -115,6 +115,7 @@ class Task(models.Model):
         # update one by one in order to preserve order of tasks
         for task in tasks:
             task.update_date = now
+            task.show_count += 1
             task.save()
             now = now + timedelta(milliseconds=1)
 

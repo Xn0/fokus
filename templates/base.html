@@ -14,9 +14,11 @@
 <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' id="body-container">
 <div class="container-sm">
     <div class="row">
+        {% if user.is_authenticated %}
         <div class="col-12 mb-4 mt-2">
             {% include "menu.html" %}
         </div>
+        {% endif %}
         <div class="col-12">
             {% block content %}{% endblock %}
         </div>

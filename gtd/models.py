@@ -2,16 +2,16 @@ import logging
 
 from datetime import datetime, timedelta, date
 
+from django.conf import settings
 from django.db import models
 from django.db.models import F
-from django.contrib.auth.models import User
 from django.shortcuts import reverse
 
 __all__ = ['RepTask', 'Task']
 
 
 class RepTask(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=300)
     last_created_date = models.DateTimeField('last task created', null=True, blank=True)
     running = models.BooleanField(default=False)
@@ -76,17 +76,17 @@ class RepTask(models.Model):
 
 
 class Task(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     text = models.CharField(max_length=300)
     show_count = models.IntegerField(default=0)
     done = models.BooleanField('task done', default=False)
-    creation_date = models.DateTimeField('creation date', default=datetime.now)
+    creation_date = models.DateTimeField('creation date', auto_created=True)
     update_date = models.DateTimeField('updated date', default=datetime.now)
     deleted = models.BooleanField(default=False)
     rep_task = models.ForeignKey(
         RepTask,
         on_delete=models.CASCADE,
-        unique_for_date='updated_date',
+        unique_for_date='update_date',
         null=True,
         blank=True
     )

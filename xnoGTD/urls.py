@@ -17,14 +17,17 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from django.contrib.auth import views as auth_views
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("accounts/login/", auth_views.LoginView.as_view(template_name="login.html"), name='login'),
     path('__debug__/', include("debug_toolbar.urls")),
     path('', include('gtd.urls', namespace='gtd')),
+    path('api/', include('api.urls', namespace='api')),
 ]
 
 if settings.STATIC_DEBUG:

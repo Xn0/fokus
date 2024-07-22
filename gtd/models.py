@@ -80,7 +80,7 @@ class Task(models.Model):
     text = models.CharField(max_length=300)
     show_count = models.IntegerField(default=0)
     done = models.BooleanField('task done', default=False)
-    creation_date = models.DateTimeField('creation date', auto_created=True)
+    creation_date = models.DateTimeField('creation date', auto_now_add=True)
     update_date = models.DateTimeField('updated date', default=datetime.now)
     deleted = models.BooleanField(default=False)
     rep_task = models.ForeignKey(
